@@ -1,0 +1,110 @@
+*{
+  font-family: sans-serif;
+}
+body{
+  background-color: #6C63FF;
+  outline: none;
+  max-width: 500px;
+  margin: 20px auto;
+}
+h1{
+  margin: auto;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 10px;
+}
+.main {
+  background: white;
+  /* width: 500px; */
+  margin: auto;
+  padding: 20px;
+  border-radius: 10px;
+}
+.searchh {
+  width: 200px; 
+  background-color: white;
+  padding: 5px 10px; 
+  display: flex;
+  border-radius: 5px;
+  border: 1px solid rgb(163, 162, 162);
+}
+.searchh input{
+  border: none;
+  outline: none;
+}
+.line{
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.line img{
+  width: 20px;
+  padding: 0 10px;
+}
+.dd{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.btnA {
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  transition: background-color 0.3s ease;
+}
+.inactive {
+  background-color:#aaa7dd;
+}
+.active {
+  background-color:#6C63FF;
+}
+.checkbox{
+  margin-top: 5px;
+}
+.first {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px; 
+}
+.add{
+  width: 40px;
+}
+select{
+  background-color: #6C63FF;
+  color: white;
+  padding: 5px 15px;
+  outline: none;
+}
+dialog{
+  position: fixed; 
+  top: 20%;
+  left: 1%;
+  z-index: 1000;
+  padding: 20px;
+  background-color: #6C63FF;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.content input{
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0;
+  padding: 7px 10px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+}
+.content button{
+  padding: 7px 10px;
+  border-radius: 5px;
+  border: none;
+  margin: 0 5px;
+}
+
+@media (max-width:500px) {
+  body{
+   margin: 10px;
+  }
+}
