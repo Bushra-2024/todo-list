@@ -9,19 +9,19 @@ function TodoList() {
   const initialData = [
     {
       id: 1,
-      title: "Note1",
-      description: "do this thing",
+      title: "Study",
+      description: "study about previous topics",
       status: false 
     },
     {
       id: 2,
       title: "Note2",
-      description: "do this thing",
+      description: "complete the task",
       status: true 
     },
     { id: 3,
       title: "Note3",
-      description: "do this thing",
+      description: "do this task",
       status: true 
     },
   ];
