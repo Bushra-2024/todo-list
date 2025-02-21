@@ -65,7 +65,7 @@ function TodoList() {
     .filter((el) => JSON.stringify(el).toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
-    <Box sx={{ maxWidth: "500px", margin: "20px auto", textAlign: "center", background: "rgba(201, 197, 197, 0.64)", padding: "50px", borderRadius: "10px" }}>
+    <Box sx={{ maxWidth: "500px", margin: "20px auto", textAlign: "center", background: "rgba(201, 197, 197, 0.64)", padding: "20px", borderRadius: "10px" }}>
       <Typography variant="h4" sx={{ color: "black", marginBottom:"20px"}}>Get Things Done!</Typography>
 
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
