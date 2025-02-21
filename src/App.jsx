@@ -1,208 +1,130 @@
-import "./App.css";
-import { useState } from "react";
-import searchIcon from "./assets/Vector (6).png";
-import edit from "./assets/Vector (7).png";
-import trash from "./assets/trash-svgrepo-com 1.png";
-import add from "./assets/Add button.png";
+import React, { useState } from "react";
+import {
+  TextField,
+  Button,
+  Dialog,
+  Checkbox,
+  Select,
+  MenuItem,
+  Card,
+  CardContent,
+  Typography,
+  Box
+} from "@mui/material";
+import btnD from './assets/trash-svgrepo-com 1.png'
+import btnE from './assets/Vector (7).png'
 
 function TodoList() {
   const initialData = [
-    {
-      id: 1,
-      title: "Study",
-      description: "study about previous topics",
-      status: false 
-    },
-    {
-      id: 2,
-      title: "Note2",
-      description: "complete the task",
-      status: true 
-    },
-    { id: 3,
-      title: "Note3",
-      description: "do this task",
-      status: true 
-    },
+    { id: 1, title: "Study", description: "revise topics", status: false },
+    { id: 2, title: "Note2", description: "Complete the task", status: true },
+    { id: 3, title: "Note3", description: "Do this task finish", status: true },
   ];
 
   const [data, setData] = useState(initialData);
-  const [searchTerm, setSearchTerm] = useState(""); 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const[isEdit,setEdit] = useState(false)
-  const [currentNote, setCurrentNote] = useState(null); // Store the note being edited
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [filter,setFilter] = useState("All notes")
-  function openModal() {
-    setIsModalOpen(true);
+  const [currentNote, setCurrentNote] = useState(null);
+
+  function openModal() { setIsModalOpen(true); }
+  function closeModal() { setIsModalOpen(false); resetForm(); }
+  function openEditModal(note) { setIsEditModalOpen(true); setTitle(note.title); setDescription(note.description); setCurrentNote(note); }
+  function closeEditModal() { setIsEditModalOpen(false); resetForm(); }
+  function resetForm() { setTitle(""); setDescription(""); }
+  
+  function saveNote() {
+    let newOne = { id: Date.now(), title, description, status: false };
+    setData([...data, newOne]);
+    closeModal();
   }
-  function closeModal() {
-    setIsModalOpen(false);
-    setEdit(false)
-    resetForm();
+
+  function updateUser() {
+    setData(data.map((e) => e.id === currentNote.id ? { ...e, title, description } : e));
+    closeEditModal();
   }
-  function resetForm() {
-    setTitle("");
-    setDescription("");
-  }
-  const saveNote = () => {
-        const newNote = {
-          title,
-          description,
-          status: true,
-        };
-        setData((prevData) => [...prevData, newNote]);
-        resetForm();
-        closeModal();
-  } 
-  function openModalE(txt){
-    setEdit(true)
-    setTitle(txt.title)
-    setDescription(txt.description)
-    setCurrentNote(txt)
-    openModal()
-  }
-  let updateTxt = () =>{
-    setData((prevData) => 
-    prevData.map((txt) => txt.id == currentNote.id
-    ? {...txt, title, description}
-    : txt
-  ))
-  resetForm()
-  closeModal()
-  }
-  // Search  
-  // Delete
+
   function deleteUser(id) {
     setData(data.filter((e) => e.id !== id));
   }
-  // filter
-  function filterchange(event){
-    let value = event.target.value
-    setFilter(value)
 
-    if(value === 'All notes'){
-      setData(initialData)
-    } else if(value === 'Active'){
-      setData(initialData.filter((todo) => todo.status === true))
-    }else if(value === 'Inactive'){
-      setData(initialData.filter((todo) => todo.status === false))
-    }
+  function checkk(e) {
+    let updatedData = data.map((el) => el.id === e.id ? { ...el, status: !el.status } : el);
+    setData(updatedData);
   }
-  function checkboxChange(id) {
-    setData(prevData =>
-      prevData.map(todo => 
-        todo.id === id 
-          ? { ...todo, status: !todo.status } 
-          : todo
-      )
-    );
+
+  function filterIt(event) {
+    setFilter(event.target.value);
   }
-  const filteredData = data.filter((el) =>
-    JSON.stringify(el).toLowerCase().includes(searchTerm.toLowerCase())
-  );
+
+  let filteredData = data
+    .filter((el) => (filter === "Done" ? el.status : filter === "Not Done" ? !el.status : true))
+    .filter((el) => JSON.stringify(el).toLowerCase().includes(searchTerm.toLowerCase()));
+
   return (
-    <div className="main">
-    
-      <h1>Get Things Done!</h1>
-      <div className="first">
-        <div className="searchh">
-          <input
-            type="search"
-            placeholder="Search note..."
-            value={searchTerm}
-            onChange={(e)=> setSearchTerm(e.target.value)}
-          />
-          <img src={searchIcon} alt="Search" />
-        </div>
-        <img onClick={()=>openModal()} src={add} className="add" alt="Add" />
-        <select onChange={(event) => filterchange(event)} value={filter}>
-          <option>All notes</option>
-          <option>Active</option>
-          <option>Inactive</option>
-        </select>
-      </div>
+    <Box sx={{ maxWidth: "500px", margin: "20px auto", textAlign: "center", background: "rgba(201, 197, 197, 0.64)", padding: "50px", borderRadius: "10px" }}>
+      <Typography variant="h4" sx={{ color: "black", marginBottom:"20px"}}>Get Things Done!</Typography>
 
-      <div>
-       {filteredData.length > 0 ? (
-      filteredData.map((e) => (
-        <div key={e.id} className="line">
-          <div className="dd">
-            <input
-              type="checkbox"
-              className="checkbox"
-              checked={e.status}
-              onChange={() => checkboxChange(e.id)}
-            />
-            <div>
-              <h3>{e.title}</h3>
-              <p>{e.description}</p>
-            </div>
-          </div>
-          <div>
-            <button className={`btnA ${e.status ? "active" : "inactive"}`}>
-              {e.status ? "Active" : "Inactive"}
-            </button>
-            <img src={edit} alt="Edit" onClick={() => openModalE(e)} />
-            <img src={trash} alt="Delete" onClick={() => deleteUser(e.id)} />
-          </div>
-        </div>
-      ))
-    ) : (
-      <h2 style={{ textAlign: "center" }}>Not found</h2>
-    )}
-  </div>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+        <TextField label="Search" variant="outlined" size="small" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+        <Select value={filter} onChange={filterIt} size="small">
+          <MenuItem value="All">All Notes</MenuItem>
+          <MenuItem value="Done">Done</MenuItem>
+          <MenuItem value="Not Done">Not Done</MenuItem>
+        </Select>
+        <Button variant="contained" sx={{ backgroundColor: "black" }} onClick={openModal}>Add</Button>
+      </Box>
 
-      {isModalOpen && (
-        <dialog open>
-          <div className="content">
-            <h2>Add New Note</h2>
-            <input
-              type="text"
-              placeholder="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)} 
-            />
-            <input
-              type="text"
-              placeholder="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)} 
-            />
-            <div>
-              <button onClick={saveNote}>Save Note</button>
-              <button onClick={closeModal}>Close</button>
-            </div>
-          </div>
-        </dialog>
+      {filteredData.length > 0 ? (
+        filteredData.map((e) => (
+          <Card key={e.id} sx={{ marginTop: "10px" }}>
+            <CardContent sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Checkbox checked={e.status} onChange={() => checkk(e)} />
+              <Box>
+                <Typography variant="h6" sx={{ textAlign: "start" }}>{e.title}</Typography>
+                <Typography>{e.description}</Typography>
+              </Box>
+              <Button variant="contained" sx={{ backgroundColor: e.status ? "darkgreen" : "red", padding: "2px 5px", height: "fit-content" }}>
+                {e.status ? "Active" : "Inactive"}
+              </Button>
+              <Box sx={{ display: "flex" }}>
+                <Button onClick={() => deleteUser(e.id)}>
+                  <img src={btnD} alt="Delete" />
+                </Button>
+                <Button onClick={() => openEditModal(e)}>
+                  <img src={btnE} alt="Edit" />
+                </Button>
+              </Box>
+            </CardContent>
+          </Card>
+        ))
+      ) : (
+        <Typography variant="h6" sx={{ color: "red", textAlign: "center", marginTop: "20px" }}>Not Found</Typography>
       )}
-       {isEdit && (
-        <dialog open>
-          <div className="content">
-            <h2>Edit Note</h2>
-            <input
-              type="text"
-              placeholder="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)} 
-            />
-            <input
-              type="text"
-              placeholder="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)} 
-            />
-            <div>
-              <button onClick={updateTxt}>Update Note</button>
-              <button onClick={closeModal}>Close</button>
-            </div>
-          </div>
-        </dialog>
-      )}
-    </div>
 
+      <Dialog open={isModalOpen} onClose={closeModal}>
+        <Box sx={{ padding: "20px", textAlign: "center" }}>
+          <Typography variant="h5">Add New Note</Typography>
+          <TextField label="Title" fullWidth value={title} onChange={(e) => setTitle(e.target.value)} sx={{ marginBottom: "10px" }} />
+          <TextField label="Description" fullWidth variant="outlined" value={description} onChange={(e) => setDescription(e.target.value)} />
+          <Button onClick={saveNote} variant="contained" sx={{ backgroundColor: "black", marginTop: "10px" }}>Save Note</Button>
+          <Button onClick={closeModal} variant="outlined" color="secondary" sx={{ marginLeft: "10px", marginTop: "10px" }}>Close</Button>
+        </Box>
+      </Dialog>
 
+      <Dialog open={isEditModalOpen} onClose={closeEditModal}>
+        <Box sx={{ padding: "20px", textAlign: "center" }}>
+          <Typography variant="h5">Edit Note</Typography>
+          <TextField label="Title" fullWidth value={title} onChange={(e) => setTitle(e.target.value)} sx={{ marginBottom: "10px" }} />
+          <TextField label="Description" fullWidth variant="outlined" value={description} onChange={(e) => setDescription(e.target.value)} />
+          <Button onClick={updateUser} variant="contained" sx={{ backgroundColor: "black", marginTop: "10px" }}>Update Note</Button>
+          <Button onClick={closeEditModal} variant="outlined" color="secondary" sx={{ marginLeft: "10px", marginTop: "10px" }}>Close</Button>
+        </Box>
+      </Dialog>
+    </Box>
   );
 }
 
